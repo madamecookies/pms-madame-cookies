@@ -13,6 +13,7 @@ let donnees = {
 // Initialisation
 document.addEventListener('DOMContentLoaded', function() {
     initialiserApp();
+    initialiserNavigation();
 });
 
 function initialiserApp() {
@@ -51,6 +52,19 @@ function initialiserApp() {
     console.log('✅ Application initialisée');
 }
 
+function initialiserNavigation() {
+    // Ajouter les événements de clic aux boutons de navigation
+    const navTabs = document.querySelectorAll('.nav-tab');
+    navTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const tabId = this.getAttribute('data-tab');
+            changerTab(tabId);
+        });
+    });
+    
+    console.log('🔗 Navigation initialisée');
+}
+
 // Navigation entre onglets
 function changerTab(tabId) {
     console.log('🔄 Changement onglet:', tabId);
@@ -69,7 +83,7 @@ function changerTab(tabId) {
 
     // Activer l'onglet sélectionné
     const targetTab = document.getElementById(tabId);
-    const targetNav = document.querySelector(`[onclick="changerTab('${tabId}')"]`);
+    const targetNav = document.querySelector(`[data-tab="${tabId}"]`);
     
     if (targetTab && targetNav) {
         targetTab.classList.add('active');
@@ -89,8 +103,23 @@ function changerTab(tabId) {
                 break;
         }
         
-        afficherNotification(`📋 Onglet ${tabId} activé`, 'success');
+        afficherNotification(`📋 Onglet ${getTabDisplayName(tabId)} activé`, 'success');
+    } else {
+        console.error('❌ Onglet introuvable:', tabId);
     }
+}
+
+function getTabDisplayName(tabId) {
+    const names = {
+        'dashboard': 'Tableau de Bord',
+        'temperatures': 'Températures',
+        'production': 'Production',
+        'nettoyage': 'Nettoyage',
+        'reception': 'Réception',
+        'historique': 'Historique',
+        'exports': 'Exports'
+    };
+    return names[tabId] || tabId;
 }
 
 // Vérification température
