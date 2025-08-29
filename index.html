@@ -1,0 +1,630 @@
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+
+        
+
+
+                
+                    <div class="mp-actions">
+                        <button class="btn btn-secondary" type="button" id="btn-add-mp">➕ Ajouter une matière première</button>
+                    </div>
+                </div>
+<!-- Nettoyage -->
+        <div class="tab-content" id="nettoyage">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🧽 Plan de Nettoyage</h2>
+                    <button class="btn btn-success" onclick="sauvegarderNettoyage()">
+                        💾 Enregistrer
+                    </button>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-input" id="nett-date">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Équipe</label>
+                        <input type="text" class="form-input" id="nett-equipe" placeholder="Nom de l'équipe" value="Équipe Production">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Type de Nettoyage</label>
+                        <select class="form-input" id="nett-type">
+                            <option>Nettoyage quotidien</option>
+                            <option>Nettoyage hebdomadaire</option>
+                            <option>Nettoyage approfondi</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🧹 Zones à Nettoyer</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="zone-check" data-zone="plans">
+                            <span><strong>Plans de travail</strong> - Dégraissant + Désinfectant</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="zone-check" data-zone="petrins">
+                            <span><strong>Pétrins (2×40L)</strong> - Dégraissant alimentaire</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="zone-check" data-zone="bouleuse">
+                            <span><strong>Bouleuse</strong> - Dégraissant alimentaire</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="zone-check" data-zone="four">
+                            <span><strong>Four (intérieur/extérieur)</strong> - Nettoyant four</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="zone-check" data-zone="grilles">
+                            <span><strong>Grilles et plaques</strong> - Dégraissant</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="zone-check" data-zone="frigos">
+                            <span><strong>Chambres froides</strong> - Dégraissant + Désinfectant</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="zone-check" data-zone="sols">
+                            <span><strong>Sols atelier</strong> - Dégraissant sols</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" class="zone-check" data-zone="dechets">
+                            <span><strong>Évacuation déchets</strong> - Sacs neufs</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📷 Photos Avant/Après</label>
+                    <div class="photo-upload" onclick="ouvrirCamera('nettoyage')">
+                        <span class="photo-icon">📷</span>
+                        <div><strong>Photographier</strong></div>
+                        <div>Zones nettoyées</div>
+                    </div>
+                    <div class="photo-preview" id="nett-photos"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Observations</label>
+                    <textarea class="form-input" id="nett-observations" rows="3" 
+                              placeholder="Difficultés rencontrées, produits manquants, zones nécessitant attention..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Réception -->
+        <div class="tab-content" id="reception">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📦 Contrôle Réception</h2>
+                    <button class="btn btn-success" onclick="sauvegarderReception()">
+                        💾 Valider
+                    </button>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Date Réception</label>
+                        <input type="date" class="form-input" id="recep-date">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fournisseur</label>
+                        <select class="form-input" id="recep-fournisseur">
+                            <option>-- Sélectionner --</option>
+                            <option>FRAIS IMPORT</option>
+                            <option>ÉLEVAGE DU PATELIN</option>
+                            <option>OVOCOOP</option>
+                            <option>REUDIS</option>
+                            <option>Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">N° Bon de Livraison</label>
+                        <input type="text" class="form-input" id="recep-bl" placeholder="Ex: BL001234">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Réceptionnaire</label>
+                        <input type="text" class="form-input" id="recep-nom" value="Wendy JEAN MARIE">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">✅ Contrôles Transport</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ctrl-vehicule">
+                            <span>Véhicule propre et hygiénique</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ctrl-temperature-transport">
+                            <span>Température transport respectée</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ctrl-chauffeur">
+                            <span>Chauffeur en tenue correcte</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ctrl-protection">
+                            <span>Produits bien protégés</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📷 Photos Livraison</label>
+                    <div class="photo-upload" onclick="ouvrirCamera('reception')">
+                        <span class="photo-icon">📷</span>
+                        <div><strong>Photographier</strong></div>
+                        <div>Produits reçus</div>
+                    </div>
+                    <div class="photo-preview" id="recep-photos"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Décision</label>
+                    <select class="form-input" id="recep-decision">
+                        <option value="accepte-total">✅ Acceptation totale</option>
+                        <option value="accepte-reserve">⚠️ Acceptation avec réserves</option>
+                        <option value="refuse-partiel">🔄 Refus partiel</option>
+                        <option value="refuse-total">❌ Refus total</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Observations</label>
+                    <textarea class="form-input" id="recep-observations" rows="3" 
+                              placeholder="Anomalies détectées, actions prises..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Historique -->
+        <div class="tab-content" id="historique">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📋 Historique</h2>
+                    <button class="btn btn-primary" onclick="filtrerHistorique()">
+                        🔍 Filtrer
+                    </button>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Du</label>
+                        <input type="date" class="form-input" id="filtre-debut">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Au</label>
+                        <input type="date" class="form-input" id="filtre-fin">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Type</label>
+                        <select class="form-input" id="filtre-type">
+                            <option value="">Tous</option>
+                            <option value="temperatures">Températures</option>
+                            <option value="production">Production</option>
+                            <option value="nettoyage">Nettoyage</option>
+                            <option value="reception">Réception</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Responsable</th>
+                                <th>Statut</th>
+                                <th>Photos</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-historique">
+                            <!-- Données historiques -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exports -->
+        <div class="tab-content" id="exports">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📄 Exports DAAF</h2>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card" style="border-left-color: #28a745;">
+                        <div class="stat-number" style="color: #28a745;">📊</div>
+                        <div class="stat-label">Températures</div>
+                        <button class="btn btn-success" onclick="exporterTemperaturesPDF()" style="margin-top: 10px; width: 100%;">
+                            📄 Export PDF
+                        </button>
+                    </div>
+                    <div class="stat-card" style="border-left-color: #007bff;">
+                        <div class="stat-number" style="color: #007bff;">🏭</div>
+                        <div class="stat-label">Production</div>
+                        <button class="btn btn-primary" onclick="exporterProductionPDF()" style="margin-top: 10px; width: 100%;">
+                            📄 Export PDF
+                        </button>
+                    </div>
+                    <div class="stat-card" style="border-left-color: #ffc107;">
+                        <div class="stat-number" style="color: #ffc107;">🧽</div>
+                        <div class="stat-label">Nettoyage</div>
+                        <button class="btn btn-warning" onclick="exporterNettoyagePDF()" style="margin-top: 10px; width: 100%;">
+                            📄 Export PDF
+                        </button>
+                    </div>
+                    <div class="stat-card" style="border-left-color: #dc3545;">
+                        <div class="stat-number" style="color: #dc3545;">📋</div>
+                        <div class="stat-label">Complet</div>
+                        <button class="btn btn-danger" onclick="exporterCompletPDF()" style="margin-top: 10px; width: 100%;">
+                            📄 Export PDF
+                        </button>
+                    </div>
+                </div>
+
+                <div class="alert alert-success">
+                    <span>☁️</span> Sauvegarde automatique active - Données sécurisées
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">🗄️ Export Données Excel</label>
+                    <button class="btn btn-success" onclick="exporterExcel()" style="width: 100%;">
+                        📊 Télécharger toutes les données Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Caméra -->
+    <div id="modalCamera" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fermerCamera()">&times;</span>
+            <h2 style="text-align: center; margin-bottom: 20px;">📷 Prise de Photo</h2>
+            <video id="video" autoplay playsinline muted></video>
+            <canvas id="canvas"></canvas>
+            <div class="camera-controls">
+                <button class="btn btn-success" onclick="prendrePhoto()">
+                    📸 Capturer
+                </button>
+                <button class="btn btn-danger" onclick="fermerCamera()">
+                    ❌ Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+  <script src="https://unpkg.com/tesseract.js@5.1.0/dist/tesseract.min.js"></script>
+  <script src="assets/app.min.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>PMS MADAME COOKIES v2.0</title>
+    
+  <link rel="stylesheet" href="assets/app.min.css" />
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">🍪</div>
+                <div>
+                    <h1>MADAME COOKIES PMS</h1>
+                    <div class="user-info">
+                        <span id="current-user">Wendy JEAN MARIE</span> • 
+                        <span id="current-date"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard">
+                <span class="nav-icon">📊</span>
+                <span>Tableau</span>
+            </button>
+            <button class="nav-tab" data-tab="temperatures">
+                <span class="nav-icon">🌡️</span>
+                <span>Températures</span>
+            </button>
+            <button class="nav-tab" data-tab="production">
+                <span class="nav-icon">🏭</span>
+                <span>Production</span>
+            </button>
+            <button class="nav-tab" data-tab="nettoyage">
+                <span class="nav-icon">🧽</span>
+                <span>Nettoyage</span>
+            </button>
+            <button class="nav-tab" data-tab="reception">
+                <span class="nav-icon">📦</span>
+                <span>Réception</span>
+            </button>
+            <button class="nav-tab" data-tab="historique">
+                <span class="nav-icon">📋</span>
+                <span>Historique</span>
+            </button>
+            <button class="nav-tab" data-tab="exports">
+                <span class="nav-icon">📄</span>
+                <span>Exports</span>
+            </button>
+        </div>
+
+        <!-- Tableau de Bord -->
+        <div class="tab-content active" id="dashboard">
+            <div class="stats-grid">
+                <div class="stat-card" style="border-left-color: #28a745;">
+                    <div class="stat-number" style="color: #28a745;" id="stat-conformes">0</div>
+                    <div class="stat-label">Contrôles OK</div>
+                </div>
+                <div class="stat-card" style="border-left-color: #dc3545;">
+                    <div class="stat-number" style="color: #dc3545;" id="stat-non-conformes">0</div>
+                    <div class="stat-label">Non-Conformités</div>
+                </div>
+                <div class="stat-card" style="border-left-color: #ffc107;">
+                    <div class="stat-number" style="color: #ffc107;" id="stat-productions">0</div>
+                    <div class="stat-label">Lots Produits</div>
+                </div>
+                <div class="stat-card" style="border-left-color: #17a2b8;">
+                    <div class="stat-number" style="color: #17a2b8;" id="stat-photos">0</div>
+                    <div class="stat-label">Photos Prises</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🚨 Statut du Jour</h2>
+                </div>
+                <div id="alertes-jour">
+                    <div class="alert alert-success">
+                        <span>✅</span> Système opérationnel - Prêt pour les contrôles
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📅 Actions Recommandées</h2>
+                </div>
+                <div class="checkbox-group" id="actions-jour">
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="action-temp-matin">
+                        <span><strong>08:00</strong> - Contrôle températures équipements</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="action-production">
+                        <span><strong>09:00</strong> - Saisie production du jour</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="action-temp-midi">
+                        <span><strong>12:00</strong> - Second contrôle températures</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="action-nettoyage">
+                        <span><strong>13:00</strong> - Plan de nettoyage quotidien</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contrôle Températures -->
+        <div class="tab-content" id="temperatures">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🌡️ Contrôle Températures</h2>
+                    <button class="btn btn-success" onclick="sauvegarderTemperatures()">
+                        💾 Sauvegarder
+                    </button>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Date et Heure</label>
+                        <input type="datetime-local" class="form-input" id="temp-datetime">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Responsable</label>
+                        <select class="form-input" id="temp-responsable">
+                            <option>Wendy JEAN MARIE</option>
+                            <option>Équipe Production</option>
+                            <option>Nylaime MAMODALY BANDJEE</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">🧊 Unité froide +2 portes<br><small>(Cible: 4,2°C ± 1°C)</small></label>
+                        <input type="number" step="0.1" class="form-input temp-input" id="temp-froide" 
+                               placeholder="Ex: 4.2" onchange="verifierTemperature(this, 4.2, 1)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">❄️ Unité négative<br><small>(Cible: -13°C ± 2°C)</small></label>
+                        <input type="number" step="0.1" class="form-input temp-input" id="temp-negative" 
+                               placeholder="Ex: -13.0" onchange="verifierTemperature(this, -13, 2)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🧊 Surgélateur 1<br><small>(Cible: -18°C ± 2°C)</small></label>
+                        <input type="number" step="0.1" class="form-input temp-input" id="temp-surgel1" 
+                               placeholder="Ex: -18.0" onchange="verifierTemperature(this, -18, 2)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🧊 Surgélateur 2<br><small>(Cible: -18°C ± 2°C)</small></label>
+                        <input type="number" step="0.1" class="form-input temp-input" id="temp-surgel2" 
+                               placeholder="Ex: -18.0" onchange="verifierTemperature(this, -18, 2)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🧊 Surgélateur 3<br><small>(Cible: -18°C ± 2°C)</small></label>
+                        <input type="number" step="0.1" class="form-input temp-input" id="temp-surgel3" 
+                               placeholder="Ex: -18.0" onchange="verifierTemperature(this, -18, 2)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🌡️ Ambiance atelier<br><small>(Max: 25°C)</small></label>
+                        <input type="number" step="0.1" class="form-input temp-input" id="temp-ambiance" 
+                               placeholder="Ex: 22.0" onchange="verifierTemperature(this, 25, 0, 'max')">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Actions correctives (si nécessaire)</label>
+                    <textarea class="form-input" id="temp-actions" rows="3" 
+                              placeholder="Décrire les actions prises en cas de température non conforme..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📷 Photos équipements</label>
+                    <div class="photo-upload" onclick="ouvrirCamera('temperatures')">
+                        <span class="photo-icon">📷</span>
+                        <div><strong>Prendre une photo</strong></div>
+                        <div>Équipements de froid</div>
+                    </div>
+                    <div class="photo-preview" id="temp-photos"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📊 Derniers Contrôles</h2>
+                    <button class="btn btn-primary" onclick="exporterTemperaturesPDF()">
+                        📄 Export PDF
+                    </button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date/Heure</th>
+                                <th>Froide</th>
+                                <th>Négative</th>
+                                <th>Surgé.1</th>
+                                <th>Surgé.2</th>
+                                <th>Surgé.3</th>
+                                <th>Ambiance</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-temperatures">
+                            <!-- Les données seront ajoutées ici -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Production -->
+        <div class="tab-content" id="production">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🏭 Nouvelle Production</h2>
+                    <button class="btn btn-success" onclick="sauvegarderProduction()">
+                        💾 Enregistrer
+                    </button>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">N° Lot (auto-généré)</label>
+                        <input type="text" class="form-input" id="prod-lot" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Variété Cookie</label>
+                        <select class="form-input" id="prod-variete">
+                            <option value="">-- Choisir une variété --</option>
+                            <option>LAIT</option>
+                            <option>NOIR</option>
+                            <option>3 CHOCOLAT</option>
+                            <option>FULL</option>
+                            <option>NATURE</option>
+                            <option>KINDER</option>
+                            <option>SNICKERS</option>
+                            <option>MATCHA</option>
+                            <option>M&MS</option>
+                            <option>NOISETTES</option>
+                            <option>PÉCAN</option>
+                            <option>PISTACHE</option>
+                            <option>SPÉCULOOS</option>
+                            <option>CRANBERRIES</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantité (pièces)</label>
+                        <input type="number" class="form-input" id="prod-quantite" placeholder="Ex: 250">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Heure Début</label>
+                        <input type="time" class="form-input" id="prod-debut">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Heure Fin</label>
+                        <input type="time" class="form-input" id="prod-fin">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Température Cuisson (°C)</label>
+                        <input type="number" class="form-input" id="prod-temperature" placeholder="160-180°C">
+                   
+<div class="form-group">
+                    <label class="form-label">✅ Contrôles Obligatoires</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ctrl-temp-mp">
+                            <span>Température matières premières vérifiée</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ctrl-proprete">
+                            <span>Propreté équipements validée</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ctrl-hygiene">
+                            <span>Hygiène personnel respectée</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ctrl-cuisson">
+                            <span>Température et durée cuisson OK</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ctrl-aspect">
+                            <span>Aspect produits finis conforme</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" id="ctrl-refroid">
+                            <span>Refroidissement rapide (&lt; 10°C en 2h)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📷 Photos Production</label>
+                    <div class="photo-upload" onclick="ouvrirCamera('production')">
+                        <span class="photo-icon">📷</span>
+                        <div><strong>Photographier</strong></div>
+<div class="form-group">
+                    <label class="form-label">🏷️ Étiquettes Matières Premières</label>
+                    <div id="mp-infos" class="hint">Ajoute chaque MP utilisée, photographie l’étiquette, l’OCR propose le <strong>N° de lot</strong> — tu peux corriger si besoin.</div>
+                    <div id="mp-list" class="mp-list"></div>
+
+                        <div>Cookies produits</div>
+                    </div>
+                    <div class="photo-preview" id="prod-photos"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Observations</label>
+                    <textarea class="form-input" id="prod-observations" rows="3" 
+                              placeholder="Anomalies, incidents, remarques particulières..."></textarea>
+                </div>
+ 
