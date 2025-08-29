@@ -1,3 +1,4 @@
+
                     </div>
                 </div>
 
@@ -327,7 +328,7 @@
         <div class="modal-content">
             <span class="close" onclick="fermerCamera()">&times;</span>
             <h2 style="text-align: center; margin-bottom: 20px;">📷 Prise de Photo</h2>
-            <video id="video" autoplay></video>
+            <video id="video" autoplay playsinline muted></video>
             <canvas id="canvas"></canvas>
             <div class="camera-controls">
                 <button class="btn btn-success" onclick="prendrePhoto()">
@@ -365,8 +366,9 @@
         });
 
         function initialiserApp() {
+    setupCameraFallback();
             // Désactiver le zoom sur les inputs (mobile)
-            document.addEventListener('touchstart', {passive: true});
+            document.addEventListener('touchstart', () => {}, { passive: true });
             
             // Empêcher le zoom sur double-tap
             let lastTouchEnd = 0;
@@ -388,7 +390,7 @@
             document.getElementById('temp-datetime').value = datetimeLocal;
             
             // Définir dates
-            const aujourd hui = maintenant.toISOString().split('T')[0];
+            const aujourdhui = maintenant.toISOString().split('T')[0];
             document.getElementById('nett-date').value = aujourdhui;
             document.getElementById('recep-date').value = aujourdhui;
             document.getElementById('filtre-debut').value = aujourdhui;
@@ -959,7 +961,7 @@
         }
 
         function mettreAJourActionsDuJour() {
-            const aujourd hui = new Date().toDateString();
+            const aujourdhui = new Date().toDateString();
             
             // Vérifier si température du matin faite
             const tempMatin = donneesPMS.temperatures.some(t => {
@@ -1155,7 +1157,8 @@ Système PMS v2.0 - Application certifiée DAAF`;
         }
 
         function telechargerFichier(contenu, nom, extension = 'txt') {
-            const blob = new Blob([contenu], { type: 'text/plain;charset=utf-8' });
+            const mime = (extension === 'csv') ? 'text/csv;charset=utf-8' : 'text/plain;charset=utf-8';
+            const blob = new Blob([contenu], { type: mime });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -1205,7 +1208,45 @@ Système PMS v2.0 - Application certifiée DAAF`;
         `;
         document.head.appendChild(style);
 
-    </script>
+    // Camera fallback using file input with capture attribute (mobile-friendly)
+function setupCameraFallback() {
+    if (!document.getElementById('camera-fallback-input')) {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.capture = 'environment';
+        input.id = 'camera-fallback-input';
+        input.style.display = 'none';
+        input.addEventListener('change', async (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                const dataURL = reader.result;
+                const photo = {
+                    id: Date.now(),
+                    type: currentPhotoType || 'production',
+                    dataURL,
+                    timestamp: new Date().toISOString(),
+                    size: Math.round((dataURL.length || 0) * 0.75)
+                };
+                donneesPMS.photos.push(photo);
+                ajouterPhotoApercu(photo);
+                sauvegarderDonnees();
+                afficherAlerte('📷 Photo ajoutée (fallback) !', 'success');
+            };
+            reader.readAsDataURL(file);
+        });
+        document.body.appendChild(input);
+    }
+}
+
+function ouvrirCameraFallback() {
+    setupCameraFallback();
+    const input = document.getElementById('camera-fallback-input');
+    if (input) input.click();
+}
+</script>
 </body>
 </html><!DOCTYPE html>
 <html lang="fr">
