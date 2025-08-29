@@ -1,4 +1,4 @@
-// ===== Consolidated JS from inline <script> tags =====
+// ===== JS extrait du single-file =====
 
 
         // Variables globales
@@ -12,7 +12,6 @@
             receptions: [],
             photos: []
         };
-        let etatProductionCourante = { mpEtiquettes: [] };
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', function() {
@@ -22,13 +21,10 @@
             definirDateActuelle();
             genererNumeroLot();
             mettreAJourStatistiques();
-            initialiserMPEtiquettesUI();
             chargerHistorique();
         });
 
         function initialiserApp() {
-    setupCameraFallback();
-    setupCameraFallback();
             // Désactiver le zoom sur les inputs (mobile)
             document.addEventListener('touchstart', () => {}, { passive: true });
             
@@ -186,7 +182,6 @@
                 resetFormulaireTemperatures();
                 afficherAlerte('✅ Contrôle température enregistré !', 'success');
                 mettreAJourStatistiques();
-            initialiserMPEtiquettesUI();
                 
                 // Vibration succès
                 if (navigator.vibrate) {
@@ -309,7 +304,6 @@
                 heureDebut: document.getElementById('prod-debut').value,
                 heureFin: document.getElementById('prod-fin').value,
                 temperature: parseFloat(document.getElementById('prod-temperature').value),
-                mpEtiquettes: JSON.parse(JSON.stringify(etatProductionCourante.mpEtiquettes)),
                 controles: {
                     tempMP: document.getElementById('ctrl-temp-mp').checked,
                     proprete: document.getElementById('ctrl-proprete').checked,
@@ -325,14 +319,11 @@
             };
             
             donneesPMS.productions.push(production);
-            etatProductionCourante.mpEtiquettes = [];
-            rendreMPEtiquettes();
             
             if (sauvegarderDonnees()) {
                 resetFormulaireProduction();
                 afficherAlerte('✅ Production enregistrée !', 'success');
                 mettreAJourStatistiques();
-            initialiserMPEtiquettesUI();
                 genererNumeroLot();
                 
                 if (navigator.vibrate) {
@@ -342,17 +333,6 @@
         }
 
         function validerFormulaireProduction() {
-            // Vérifications MP: au moins 1 et toutes avec photo + lot
-            const missing = (etatProductionCourante.mpEtiquettes||[]).filter(mp=>!mp.photoId || !mp.lot);
-            if((etatProductionCourante.mpEtiquettes||[]).length===0){
-                afficherAlerte('⚠️ Ajoute les étiquettes des matières premières avant de valider.', 'warning');
-                return false;
-            }
-            if(missing.length>0){
-                afficherAlerte('⚠️ Chaque MP doit avoir une photo et un n° de lot.', 'warning');
-                return false;
-            }
-
             const variete = document.getElementById('prod-variete').value;
             const quantite = document.getElementById('prod-quantite').value;
             
@@ -415,7 +395,6 @@
                 resetFormulaireNettoyage();
                 afficherAlerte('✅ Plan de nettoyage enregistré !', 'success');
                 mettreAJourStatistiques();
-            initialiserMPEtiquettesUI();
                 
                 if (navigator.vibrate) {
                     navigator.vibrate(100);
@@ -470,7 +449,6 @@
                 resetFormulaireReception();
                 afficherAlerte('✅ Réception enregistrée !', 'success');
                 mettreAJourStatistiques();
-            initialiserMPEtiquettesUI();
                 
                 if (navigator.vibrate) {
                     navigator.vibrate(100);
@@ -508,38 +486,34 @@
         }
 
         // Gestion de la caméra
-        
-function ouvrirCamera(type) {
-    currentPhotoType = type;
-    // Try native camera via getUserMedia
-    document.getElementById('modalCamera').style.display = 'block';
-    const video = document.getElementById('video');
-    if (video){ video.setAttribute('playsinline',''); video.muted = true; }
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ 
-            video: { 
-                facingMode: { ideal: 'environment' },
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
-            } 
-        })
-        .then(function(mediaStream) {
-            stream = mediaStream;
-            const video = document.getElementById('video');
-            video.srcObject = stream;
-            video.play().catch(()=>{});
-        })
-        .catch(function(err) {
-            console.error('Erreur caméra:', err);
-            afficherAlerte('ℹ️ Caméra native indisponible — passage en mode photo simplifié.', 'info');
-            fermerCamera();
-            ouvrirCameraFallback();
-        });
-    } else {
-        ouvrirCameraFallback();
-    }
-}
-
+        function ouvrirCamera(type) {
+            currentPhotoType = type;
+            document.getElementById('modalCamera').style.display = 'block';
+            
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'environment',  // Caméra arrière en priorité
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    } 
+                })
+                .then(function(mediaStream) {
+                    stream = mediaStream;
+                    const video = document.getElementById('video');
+                    video.srcObject = stream;
+                    video.play();
+                })
+                .catch(function(err) {
+                    console.error('Erreur caméra:', err);
+                    afficherAlerte('❌ Impossible d\'accéder à la caméra. Vérifiez les permissions.', 'danger');
+                    fermerCamera();
+                });
+            } else {
+                afficherAlerte('❌ Caméra non supportée sur cet appareil', 'danger');
+                fermerCamera();
+            }
+        }
 
         function fermerCamera() {
             if (stream) {
@@ -622,7 +596,6 @@ function ouvrirCamera(type) {
             sauvegarderDonnees();
             afficherAlerte('🗑️ Photo supprimée', 'warning');
             mettreAJourStatistiques();
-            initialiserMPEtiquettesUI();
         }
 
         function obtenirPhotosParType(type) {
@@ -842,8 +815,7 @@ Système PMS v2.0 - Application certifiée DAAF`;
         }
 
         function telechargerFichier(contenu, nom, extension = 'txt') {
-            const mime = (extension === 'csv') ? 'text/csv;charset=utf-8' : 'text/plain;charset=utf-8';
-            const blob = new Blob([contenu], { type: mime });
+            const blob = new Blob([contenu], { type: 'text/plain;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -893,53 +865,75 @@ Système PMS v2.0 - Application certifiée DAAF`;
         `;
         document.head.appendChild(style);
 
-    // Camera fallback using file input with capture attribute (mobile-friendly)
-function setupCameraFallback() {
-    if (!document.getElementById('camera-fallback-input')) {
+    
+// === Fallback Caméra (input capture) ===
+function setupCameraFallback(){
+    if (!document.getElementById('camera-fallback-input')){
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = 'image/*';
         input.capture = 'environment';
         input.id = 'camera-fallback-input';
         input.style.display = 'none';
-        input.addEventListener('change', async (e) => {
-            const file = e.target.files && e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = () => {
-                const dataURL = reader.result;
+        input.addEventListener('change', async (e)=>{
+            const f = e.target.files && e.target.files[0];
+            if(!f) return;
+            const r = new FileReader();
+            r.onload = ()=>{
+                const dataURL = r.result;
                 const photo = {
                     id: Date.now(),
                     type: currentPhotoType || 'production',
                     dataURL,
-                    timestamp: new Date().toISOString(),
-                    size: Math.round((dataURL.length || 0) * 0.75)
+                    timestamp: new Date().toISOString()
                 };
                 donneesPMS.photos.push(photo);
-                ajouterPhotoApercu(photo);
-                sauvegarderDonnees();
-                afficherAlerte('📷 Photo ajoutée (fallback) !', 'success');
+                if (typeof ajouterPhotoApercu === 'function') ajouterPhotoApercu(photo);
+                if (typeof sauvegarderDonnees === 'function') sauvegarderDonnees();
+                if (navigator.vibrate) navigator.vibrate(100);
             };
-            reader.readAsDataURL(file);
+            r.readAsDataURL(f);
         });
         document.body.appendChild(input);
     }
 }
-
-function ouvrirCameraFallback() {
+function ouvrirCameraFallback(){
     setupCameraFallback();
     const input = document.getElementById('camera-fallback-input');
-    if (input) input.click();
+    if(input) input.click();
 }
 
+// === Override ouvrirCamera pour utiliser fallback si getUserMedia échoue ===
+(function(){
+    const _open = window.ouvrirCamera;
+    window.ouvrirCamera = function(type){
+        if (typeof _open === 'function'){
+            try{
+                currentPhotoType = type;
+                _open(type);
+            }catch(e){
+                try{ fermerCamera(); }catch(_){}
+                ouvrirCameraFallback();
+            }
+        }else{
+            currentPhotoType = type;
+            ouvrirCameraFallback();
+        }
+    }
+})();
 
+// === MP Étiquettes + OCR ===
+let etatProductionCourante = { mpEtiquettes: [] };
+let currentMPIndex = null;
 
-// === MP Étiquettes (OCR) ===
 function ajouterMPEtiquette(nom=''){
-    const idx = etatProductionCourante.mpEtiquettes.length;
     etatProductionCourante.mpEtiquettes.push({ nom, lot:'', photoId:null, dataURL:null });
     rendreMPEtiquettes();
-    return idx;
+}
+
+function supprimerMPEtiquette(i){
+    etatProductionCourante.mpEtiquettes.splice(i,1);
+    rendreMPEtiquettes();
 }
 
 function rendreMPEtiquettes(){
@@ -970,104 +964,95 @@ function rendreMPEtiquettes(){
     });
 }
 
-function supprimerMPEtiquette(i){
-    etatProductionCourante.mpEtiquettes.splice(i,1);
-    rendreMPEtiquettes();
-}
-
 function initialiserMPEtiquettesUI(){
     const btn = document.getElementById('btn-add-mp');
-    if(btn){
-        btn.onclick = ()=>{
-            const nom = prompt('Nom de la matière première ?','');
-            ajouterMPEtiquette(nom||'');
-        };
-    }
+    if(btn){ btn.onclick = ()=>{ const nom = prompt('Nom de la matière première ?',''); ajouterMPEtiquette(nom||''); }; }
     rendreMPEtiquettes();
 }
 
-// Hook spécifique pour prise de photo d’étiquette
-let currentMPIndex = null;
 function prendrePhotoEtiquette(i){
     currentMPIndex = i;
     ouvrirCamera('mp-label');
 }
 
-// Try native TextDetector then fallback Tesseract
+// OCR utilitaires
 async function ocrLireTexte(dataURL){
-    // 1) Shape Detection API
     try{
         if('TextDetector' in window){
             const det = new window.TextDetector();
-            // Convert dataURL to ImageBitmap
             const img = await createImageBitmap(await (await fetch(dataURL)).blob());
             const results = await det.detect(img);
-            const texte = results.map(r=>r.rawValue||'').join(' ');
-            if(texte && texte.length>3) return texte;
+            const txt = results.map(r=>r.rawValue||'').join(' ');
+            if(txt && txt.length>3) return txt;
         }
-    }catch(e){ /* ignore */ }
-
-    // 2) Tesseract.js
+    }catch(e){}
     if (window.Tesseract && window.Tesseract.recognize){
         try{
-            const { data } = await Tesseract.recognize(dataURL, 'eng+fra', { logger: ()=>{} });
+            const { data } = await Tesseract.recognize(dataURL, 'eng+fra');
             return data && data.text ? data.text : '';
-        }catch(e){ console.error('OCR Tesseract error:', e); }
+        }catch(e){}
     }
     return '';
 }
 
-// Extraire un numéro de lot plausible
 function extraireNumeroLot(texte){
     if(!texte) return '';
     const t = texte.replace(/\s+/g,' ').trim();
-
-    // Cherche motifs explicites "LOT", "Batch", "N°"
-    const re1 = /(lot|batch|n[°o]\.?|nº)\s*[:\-]?\s*([A-Z0-9\-_/\.]{3,})/i;
+    const re1 = /(lot|batch|n[°o]\.?|nº)\s*[:\-]?\s*([A-Z0-9\-_\/\.]{3,})/i;
     const m1 = t.match(re1);
     if(m1) return m1[2];
-
-    // Cherche séquences alphanum de 5 à 20 char avec au moins 1 chiffre
-    const re2 = /\b([A-Z0-9][A-Z0-9\-_/\.]{4,20})\b/g;
-    let cand = '';
-    let x;
+    const re2 = /\b([A-Z0-9][A-Z0-9\-_\/\.]{4,20})\b/g;
+    let x, cand='';
     while((x = re2.exec(t))){
         if(/[0-9]/.test(x[1])){ cand = x[1]; break; }
     }
     return cand;
 }
 
-// Intégration à la prise de photo existante
-const _prendrePhoto_original = window.prendrePhoto;
-window.prendrePhoto = async function(){
-    // Appel natif
-    _prendrePhoto_original.call(this);
-
-    // Récupère la dernière photo ajoutée
-    try{
-        const last = donneesPMS.photos[donneesPMS.photos.length-1];
-        if(!last) return;
-
-        if(currentPhotoType === 'mp-label' && currentMPIndex !== null){
-            // Associe la photo
-            etatProductionCourante.mpEtiquettes[currentMPIndex].photoId = last.id;
-            etatProductionCourante.mpEtiquettes[currentMPIndex].dataURL = last.dataURL;
-
-            // OCR
-            const texte = await ocrLireTexte(last.dataURL);
-            const lot = extraireNumeroLot(texte);
-            if(lot){
-                etatProductionCourante.mpEtiquettes[currentMPIndex].lot = lot;
-                const input = document.getElementById('mp-lot-'+currentMPIndex);
-                if(input) input.value = lot;
-                afficherAlerte('🔎 Lot détecté : '+lot, 'success');
-            }else{
-                afficherAlerte('ℹ️ Photo ajoutée. Aucune mention de lot détectée automatiquement.', 'info');
+// Hook sur prendrePhoto pour OCR si type 'mp-label'
+(function(){
+    const _prendre = window.prendrePhoto;
+    window.prendrePhoto = async function(){
+        if(typeof _prendre === 'function'){ _prendre(); }
+        try{
+            const last = donneesPMS.photos[donneesPMS.photos.length-1];
+            if(!last) return;
+            if(currentPhotoType === 'mp-label' && currentMPIndex !== null){
+                etatProductionCourante.mpEtiquettes[currentMPIndex].photoId = last.id;
+                etatProductionCourante.mpEtiquettes[currentMPIndex].dataURL = last.dataURL;
+                const txt = await ocrLireTexte(last.dataURL);
+                const lot = extraireNumeroLot(txt);
+                if(lot){
+                    etatProductionCourante.mpEtiquettes[currentMPIndex].lot = lot;
+                    const input = document.getElementById('mp-lot-'+currentMPIndex);
+                    if(input) input.value = lot;
+                    if (typeof afficherAlerte === 'function') afficherAlerte('Lot détecté : '+lot, 'success');
+                }
+                rendreMPEtiquettes();
+                currentMPIndex = null;
             }
-            rendreMPEtiquettes();
-            currentMPIndex = null;
-        }
-    }catch(e){
-        console.error(e);
+        }catch(e){}
     }
-}
+})();
+
+// Validation renforcée Production
+(function(){
+    const _valider = window.validerFormulaireProduction;
+    window.validerFormulaireProduction = function(){
+        // MPs obligatoires avec photo + lot
+        const arr = (etatProductionCourante.mpEtiquettes||[]);
+        if(arr.length === 0){
+            if (typeof afficherAlerte === 'function') afficherAlerte('Ajoute les étiquettes des matières premières.', 'warning');
+            return false;
+        }
+        const missing = arr.filter(mp=>!mp.photoId || !mp.lot);
+        if(missing.length>0){
+            if (typeof afficherAlerte === 'function') afficherAlerte('Chaque MP doit avoir une photo + un N° de lot.', 'warning');
+            return false;
+        }
+        return _valider ? _valider() : true;
+    }
+})();
+
+
+

@@ -1,6 +1,6 @@
 
 
-/* ===== Consolidated CSS from inline <style> tags ===== */
+/* ===== CSS extrait du single-file ===== */
 
 
         * {
@@ -584,13 +584,13 @@
             }
         }
     
-
-/* MP Etiquettes */
-.mp-list{display:flex;flex-direction:column;gap:12px;margin-top:8px}
-.mp-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px;border:1px dashed #d0d5dd;border-radius:12px;background:#fff}
-.mp-item .mp-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.mp-item .mp-actions{display:flex;gap:8px;justify-content:flex-end}
-.mp-photo{width:90px;height:64px;border-radius:8px;background:#f4f6fb;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #e5e7eb}
-.mp-photo img{width:100%;height:100%;object-fit:cover}
-.hint{font-size:.9rem;color:#475467;margin-bottom:6px}
-.required{color:#d92d20;font-weight:600}
+    /* MP Etiquettes */
+    .mp-list{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+    .mp-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px;border:1px dashed #d0d5dd;border-radius:12px;background:#fff}
+    .mp-item .mp-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .mp-item .mp-actions{display:flex;gap:8px;justify-content:flex-end}
+    .mp-photo{width:90px;height:64px;border-radius:8px;background:#f4f6fb;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #e5e7eb}
+    .mp-photo img{width:100%;height:100%;object-fit:cover}
+    .hint{font-size:.9rem;color:#475467;margin-bottom:6px}
+    .required{color:#d92d20;font-weight:600}
+    
