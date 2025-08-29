@@ -8,6 +8,11 @@
   <script src="https://unpkg.com/tesseract.js@5.1.0/dist/tesseract.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.1/dist/jspdf.plugin.autotable.min.js"></script>
+<script>
+(function setDefaultHashForTabs(){
+  try{ if(!location.hash){ location.replace(location.pathname + location.search + '#dashboard'); } }catch(e){}
+})();
+</script>
 </head>
 <body>
     <div class="app-container">
@@ -31,30 +36,30 @@
                 <span class="nav-icon">📊</span>
                 <span>Tableau</span>
             </button>
-            <button class="nav-tab" data-tab="temperatures">
+            <a class="nav-tab" href="#temperatures">
                 <span class="nav-icon">🌡️</span>
                 <span>Températures</span>
-            </button>
-            <button class="nav-tab" data-tab="production">
+            </a>
+            <a class="nav-tab" href="#production">
                 <span class="nav-icon">🏭</span>
                 <span>Production</span>
-            </button>
-            <button class="nav-tab" data-tab="nettoyage">
+            </a>
+            <a class="nav-tab" href="#nettoyage">
                 <span class="nav-icon">🧽</span>
                 <span>Nettoyage</span>
-            </button>
-            <button class="nav-tab" data-tab="reception">
+            </a>
+            <a class="nav-tab" href="#reception">
                 <span class="nav-icon">📦</span>
                 <span>Réception</span>
-            </button>
-            <button class="nav-tab" data-tab="historique">
+            </a>
+            <a class="nav-tab" href="#historique">
                 <span class="nav-icon">📋</span>
                 <span>Historique</span>
-            </button>
-            <button class="nav-tab" data-tab="exports">
+            </a>
+            <a class="nav-tab" href="#exports">
                 <span class="nav-icon">📄</span>
                 <span>Exports</span>
-            </button>
+            </a>
         </div>
 
         <!-- Tableau de Bord -->
