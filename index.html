@@ -4,599 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>PMS MADAME COOKIES v2.0</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        .app-container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 10px;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 15px 20px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 10px;
-        }
-
-        .logo-icon {
-            font-size: 32px;
-            animation: rotate 4s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .logo h1 {
-            color: #2c3e50;
-            font-size: 22px;
-            font-weight: 800;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .user-info {
-            color: #7f8c8d;
-            font-size: 14px;
-        }
-
-        .nav-tabs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .nav-tab {
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            border-radius: 15px;
-            padding: 12px 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 700;
-            color: #7f8c8d;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            min-height: 70px;
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-tab.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .nav-icon {
-            font-size: 20px;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .card-title {
-            font-size: 20px;
-            font-weight: 800;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 12px 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            min-height: 44px;
-        }
-
-        .btn:hover, .btn:active {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #55efc4, #00b894);
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, #fdcb6e, #e17055);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ff7675, #d63031);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        @media (min-width: 768px) {
-            .form-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            }
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-label {
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #2c3e50;
-            font-size: 14px;
-        }
-
-        .form-input, .form-select {
-            padding: 12px 15px;
-            border: 2px solid #e1e8ed;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: white;
-            min-height: 44px;
-        }
-
-        .form-input:focus, .form-select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .temp-input.alert {
-            background: #fee;
-            border-color: #dc3545;
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        @media (min-width: 768px) {
-            .stats-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-left: 4px solid;
-        }
-
-        .stat-number {
-            font-size: 28px;
-            font-weight: 900;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            color: #7f8c8d;
-            font-size: 12px;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-
-        .photo-upload {
-            border: 3px dashed #e1e8ed;
-            border-radius: 15px;
-            padding: 30px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
-            margin: 15px 0;
-        }
-
-        .photo-upload:hover, .photo-upload.active {
-            border-color: #667eea;
-            background: #f0f8ff;
-            transform: translateY(-2px);
-        }
-
-        .photo-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .photo-preview {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .photo-item {
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .photo-item img {
-            width: 100%;
-            height: 100px;
-            object-fit: cover;
-        }
-
-        .photo-delete {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .alert {
-            padding: 15px 20px;
-            margin: 15px 0;
-            border-radius: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 4px solid #28a745;
-        }
-
-        .alert-warning {
-            background: #fff3cd;
-            color: #856404;
-            border-left: 4px solid #ffc107;
-        }
-
-        .alert-danger {
-            background: #f8d7da;
-            color: #721c24;
-            border-left: 4px solid #dc3545;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .data-table th,
-        .data-table td {
-            padding: 12px 8px;
-            text-align: left;
-            border-bottom: 1px solid #e1e8ed;
-            font-size: 13px;
-        }
-
-        .data-table th {
-            background: #f8f9fa;
-            font-weight: 700;
-            color: #2c3e50;
-        }
-
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .status-conforme {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-non-conforme {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background: white;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 20px;
-            width: 95%;
-            max-width: 500px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            position: relative;
-        }
-
-        .close {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: #f8f9fa;
-        }
-
-        .close:hover {
-            color: #000;
-            background: #e9ecef;
-        }
-
-        #video {
-            width: 100%;
-            max-width: 300px;
-            border-radius: 12px;
-            margin: 20px auto;
-            display: block;
-        }
-
-        #canvas {
-            display: none;
-        }
-
-        .camera-controls {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .floating-alert {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 2000;
-            max-width: 350px;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin: 15px 0;
-        }
-
-        @media (min-width: 768px) {
-            .checkbox-group {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .checkbox-item:hover {
-            background: #e9ecef;
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Responsive amélioré */
-        @media (max-width: 768px) {
-            .app-container {
-                padding: 5px;
-            }
-            
-            .header {
-                padding: 10px 15px;
-                margin-bottom: 15px;
-            }
-            
-            .logo h1 {
-                font-size: 18px;
-            }
-            
-            .card {
-                padding: 15px;
-                margin-bottom: 15px;
-            }
-            
-            .card-title {
-                font-size: 18px;
-            }
-            
-            .btn {
-                padding: 10px 15px;
-                font-size: 13px;
-            }
-            
-            .data-table {
-                font-size: 11px;
-            }
-            
-            .data-table th,
-            .data-table td {
-                padding: 8px 4px;
-            }
-        }
-
-        /* Amélioration accessibilité mobile */
-        @media (max-width: 480px) {
-            .nav-tabs {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-input, .form-select {
-                font-size: 16px; /* Empêche le zoom sur iOS */
-            }
-        }
-    
-/* MP Etiquettes */
-.mp-list{display:flex;flex-direction:column;gap:12px;margin-top:8px}
-.mp-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px;border:1px dashed #d0d5dd;border-radius:12px;background:#fff}
-.mp-item .mp-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.mp-item .mp-actions{display:flex;gap:8px;justify-content:flex-end}
-.mp-photo{width:90px;height:64px;border-radius:8px;background:#f4f6fb;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #e5e7eb}
-.mp-photo img{width:100%;height:100%;object-fit:cover}
-.hint{font-size:.9rem;color:#475467;margin-bottom:6px}
-.required{color:#d92d20;font-weight:600}
-</style>
-<script src="https://unpkg.com/tesseract.js@5.1.0/dist/tesseract.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app-container">
@@ -616,31 +24,31 @@
 
         <!-- Navigation -->
         <div class="nav-tabs">
-            <button class="nav-tab active" data-tab="dashboard">
+            <button class="nav-tab active" onclick="changerTab('dashboard')">
                 <span class="nav-icon">📊</span>
                 <span>Tableau</span>
             </button>
-            <button class="nav-tab" data-tab="temperatures">
+            <button class="nav-tab" onclick="changerTab('temperatures')">
                 <span class="nav-icon">🌡️</span>
                 <span>Températures</span>
             </button>
-            <button class="nav-tab" data-tab="production">
+            <button class="nav-tab" onclick="changerTab('production')">
                 <span class="nav-icon">🏭</span>
                 <span>Production</span>
             </button>
-            <button class="nav-tab" data-tab="nettoyage">
+            <button class="nav-tab" onclick="changerTab('nettoyage')">
                 <span class="nav-icon">🧽</span>
                 <span>Nettoyage</span>
             </button>
-            <button class="nav-tab" data-tab="reception">
+            <button class="nav-tab" onclick="changerTab('reception')">
                 <span class="nav-icon">📦</span>
                 <span>Réception</span>
             </button>
-            <button class="nav-tab" data-tab="historique">
+            <button class="nav-tab" onclick="changerTab('historique')">
                 <span class="nav-icon">📋</span>
                 <span>Historique</span>
             </button>
-            <button class="nav-tab" data-tab="exports">
+            <button class="nav-tab" onclick="changerTab('exports')">
                 <span class="nav-icon">📄</span>
                 <span>Exports</span>
             </button>
@@ -684,19 +92,19 @@
                 </div>
                 <div class="checkbox-group" id="actions-jour">
                     <label class="checkbox-item">
-                        <input type="checkbox" id="action-temp-matin">
+                        <input type="checkbox" id="action-temp-matin" onchange="sauvegarderAction(this)">
                         <span><strong>08:00</strong> - Contrôle températures équipements</span>
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" id="action-production">
+                        <input type="checkbox" id="action-production" onchange="sauvegarderAction(this)">
                         <span><strong>09:00</strong> - Saisie production du jour</span>
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" id="action-temp-midi">
+                        <input type="checkbox" id="action-temp-midi" onchange="sauvegarderAction(this)">
                         <span><strong>12:00</strong> - Second contrôle températures</span>
                     </label>
                     <label class="checkbox-item">
-                        <input type="checkbox" id="action-nettoyage">
+                        <input type="checkbox" id="action-nettoyage" onchange="sauvegarderAction(this)">
                         <span><strong>13:00</strong> - Plan de nettoyage quotidien</span>
                     </label>
                 </div>
@@ -792,9 +200,9 @@
                                 <th>Date/Heure</th>
                                 <th>Froide</th>
                                 <th>Négative</th>
-                                <th>Surgé.1</th>
-                                <th>Surgé.2</th>
-                                <th>Surgé.3</th>
+                                <th>Surgél.1</th>
+                                <th>Surgél.2</th>
+                                <th>Surgél.3</th>
                                 <th>Ambiance</th>
                                 <th>Statut</th>
                             </tr>
@@ -857,4 +265,136 @@
                     <div class="form-group">
                         <label class="form-label">Température Cuisson (°C)</label>
                         <input type="number" class="form-input" id="prod-temperature" placeholder="160-180°C">
-                    
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Observations qualité</label>
+                    <textarea class="form-input" id="prod-observations" rows="3" 
+                              placeholder="Notes sur l'aspect, texture, cuisson..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">📷 Photos production</label>
+                    <div class="photo-upload" onclick="ouvrirCamera('production')">
+                        <span class="photo-icon">📷</span>
+                        <div><strong>Photographier le lot</strong></div>
+                        <div>Avant/pendant/après cuisson</div>
+                    </div>
+                    <div class="photo-preview" id="prod-photos"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📊 Productions du Jour</h2>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>N° Lot</th>
+                                <th>Variété</th>
+                                <th>Quantité</th>
+                                <th>Heure</th>
+                                <th>Température</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-productions">
+                            <!-- Les données seront ajoutées ici -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Autres sections... -->
+        <div class="tab-content" id="nettoyage">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🧽 Plan de Nettoyage</h2>
+                    <button class="btn btn-success" onclick="sauvegarderNettoyage()">
+                        💾 Valider Plan
+                    </button>
+                </div>
+                <p>Section Nettoyage - En développement</p>
+            </div>
+        </div>
+
+        <div class="tab-content" id="reception">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📦 Réception Marchandises</h2>
+                    <button class="btn btn-success" onclick="sauvegarderReception()">
+                        💾 Enregistrer
+                    </button>
+                </div>
+                <p>Section Réception - En développement</p>
+            </div>
+        </div>
+
+        <div class="tab-content" id="historique">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📋 Historique Complet</h2>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date/Heure</th>
+                                <th>Type</th>
+                                <th>Responsable</th>
+                                <th>Détails</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-historique">
+                            <!-- Les données seront ajoutées ici -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="exports">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📄 Exports et Rapports</h2>
+                </div>
+                <div class="form-grid">
+                    <button class="btn btn-success" onclick="genererRapportPDF()">
+                        📄 Générer PDF
+                    </button>
+                    <button class="btn btn-primary" onclick="exporterExcel()">
+                        📊 Export Excel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Caméra -->
+    <div id="modalCamera" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fermerCamera()">&times;</span>
+            <h2 style="margin-bottom: 20px;">📷 Prendre une photo</h2>
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas"></canvas>
+            <div class="camera-controls">
+                <button class="btn btn-success" onclick="prendrePhoto()">
+                    📸 Capturer
+                </button>
+                <button class="btn btn-danger" onclick="fermerCamera()">
+                    ❌ Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
